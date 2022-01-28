@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.LEFT_TALON_LEADER;
-import static frc.robot.Constants.RANGE_FINDER_PORT;
-import static frc.robot.Constants.RIGHT_TALON_LEADER;
-
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -15,33 +11,27 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.ADXRS450_GyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.VecBuilder;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.sim.PhysicsSim;
+
+
+import static frc.robot.Constants.*;
 
 public class DriveTrainSubsystem extends SubsystemBase {
   /** Creates a new DriveTrainSubsystem. */
@@ -79,8 +69,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     timer1.start();
 
     m_leftDrive = new WPI_TalonFX(0, "FastFD");
-    m_leftFollower = new WPI_TalonFX(1, "FastFD");
-    m_rightDrive = new WPI_TalonFX(2, "FastFD");
+    m_leftFollower = new WPI_TalonFX(LEFT_TALON_LEADER, "FastFD");
+    m_rightDrive = new WPI_TalonFX(RIGHT_TALON_LEADER, "FastFD");
     m_rightFollower = new WPI_TalonFX(3, "FastFD");
 
     // Setup the Simulation input classes
@@ -160,10 +150,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
     m_right_invert = TalonFXInvertType.Clockwise; //Same as invert = "true"
 
     // On the robot, the left side is positive forward, so don't change it.
-    m_leftDrive.setInverted(TalonFXInvertType.CounterClockwise);
+    m_leftDrive.setInverted(m_left_invert);
 
     // On the robot, the right side output needs to be inverted so that positive is forward.
-    m_rightDrive.setInverted(TalonFXInvertType.Clockwise);
+    m_rightDrive.setInverted(m_right_invert);
 
     /*
      * Talon FX does not need sensor phase set for its integrated sensor

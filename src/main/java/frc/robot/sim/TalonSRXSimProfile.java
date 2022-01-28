@@ -19,6 +19,7 @@ class TalonSRXSimProfile extends SimProfile {
     private final boolean _sensorPhase;
 
     /** The current position */
+    @SuppressWarnings("unused")
     private double _pos = 0;
 
     /** The current velocity */
