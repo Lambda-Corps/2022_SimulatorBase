@@ -68,10 +68,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
     timer1 = new Timer();
     timer1.start();
 
-    m_leftDrive = new WPI_TalonFX(0, "FastFD");
-    m_leftFollower = new WPI_TalonFX(LEFT_TALON_LEADER, "FastFD");
+    m_leftDrive = new WPI_TalonFX(LEFT_TALON_LEADER, "FastFD");
+    m_leftFollower = new WPI_TalonFX(LEFT_TALON_FOLLOWER, "FastFD");
     m_rightDrive = new WPI_TalonFX(RIGHT_TALON_LEADER, "FastFD");
-    m_rightFollower = new WPI_TalonFX(3, "FastFD");
+    m_rightFollower = new WPI_TalonFX(RIGHT_TALON_FOLLOWER, "FastFD");
 
     // Setup the Simulation input classes
     m_leftDriveSim = m_leftDrive.getSimCollection();

@@ -28,8 +28,10 @@ public final class Constants {
         public static final int DRIVER_LEFT_AXIS = 1;
 
         // Talons
-        public static final int LEFT_TALON_LEADER = 5;
-        public static final int RIGHT_TALON_LEADER = 3;
+        public static final int LEFT_TALON_LEADER = 2;
+        public static final int LEFT_TALON_FOLLOWER = 4;
+        public static final int RIGHT_TALON_LEADER = 1;
+        public static final int RIGHT_TALON_FOLLOWER = 3;
 
         public static final class DriveConstants {
                 /*
