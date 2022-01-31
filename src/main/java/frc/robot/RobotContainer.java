@@ -13,7 +13,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +26,8 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 import static frc.robot.Constants.*;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -52,7 +57,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {}
 
-    /**
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
@@ -81,21 +86,33 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
+    Trajectory trajectory = new Trajectory();
+    //String path = "pathplanner/generatedJSON/testpath.json";
+    String path = "output/testpath.wpilib.json";
+    try{
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    }
+    // A default trajectory to follow.  All units in meters.
+    catch(IOException ex){
+      DriverStation.reportError("Unable to open trajectory: " + path, ex.getStackTrace());
+      trajectory =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
+            new Pose2d(0, 3, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            //List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            List.of(new Translation2d(1,3), new Translation2d(2,3)),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(3, 3, new Rotation2d(0)),
             // Pass config
             config);
+    }
+    
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            trajectory,
             m_drivetrain::getPose,
             new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -111,9 +128,10 @@ public class RobotContainer {
                 m_drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+    m_drivetrain.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
   }
+
 }
