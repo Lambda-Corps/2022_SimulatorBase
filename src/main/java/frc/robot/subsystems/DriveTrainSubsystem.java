@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -460,4 +461,81 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		 */
 		masterConfig.auxiliaryPID.selectedFeedbackCoefficient = DriveConstants.kTurnTravelUnitsPerRotation / DriveConstants.kEncoderUnitsPerRotation;
 	}
+
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    double left_meters_sec = DriveConstants.k100msPerSecond * nativeUnitsToDistanceMeters(m_leftDrive.getSelectedSensorVelocity());
+    double right_meters_sec = DriveConstants.k100msPerSecond * nativeUnitsToDistanceMeters(m_rightDrive.getSelectedSensorVelocity());
+    return new DifferentialDriveWheelSpeeds(left_meters_sec, right_meters_sec);
+  }
+
+  /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    m_leftDrive.setVoltage(leftVolts);
+    m_rightDrive.setVoltage(rightVolts);
+    m_safety_drive.feed();
+  }
+
+  /**
+   * Gets the average distance of the two encoders.
+   *
+   * @return the average of the two encoder readings
+   */
+  public double getAverageEncoderDistance() {
+    double left_meters = nativeUnitsToDistanceMeters(m_leftDrive.getSelectedSensorPosition());
+    double right_meters = nativeUnitsToDistanceMeters(m_rightDrive.getSelectedSensorPosition());
+    return (left_meters + right_meters) / 2.0;
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, m_navx.getRotation2d());
+  }
+
+  /**
+   * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
+   *
+   * @param maxOutput the maximum output to which the drive will be constrained
+   */
+  public void setMaxOutput(double maxOutput) {
+    m_safety_drive.setMaxOutput(maxOutput);
+  }
+
+  /** Zeroes the heading of the robot. */
+  public void zeroHeading() {
+    m_navx.reset();
+  }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getScaledHeading() {
+    return m_navx.getRotation2d().getDegrees();
+  }
+
+  /**
+   * Returns the turn rate of the robot.
+   *
+   * @return The turn rate of the robot, in degrees per second
+   */
+  public double getTurnRate() {
+    return -m_navx.getRate();
+  }
 }

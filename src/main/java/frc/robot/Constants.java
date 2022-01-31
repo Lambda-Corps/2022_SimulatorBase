@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -47,7 +49,7 @@ public final class Constants {
                                                                  // drivetrain, encoders mount 1:1 with the gearbox shaft.
                 public static final double kGearRatio = 10.71;   // Switch kSensorGearRatio to this gear ratio if encoder is on the motor instead
                                                                  // of on the gearbox.
-                public static final double kWheelRadiusInches = 6.5;
+                public static final double kWheelRadiusInches = 3.25;
                 public static final int k100msPerSecond = 10;
                 public static final double kNeutralDeadband = 0.003;
 
@@ -58,7 +60,7 @@ public final class Constants {
                   * 
                   * 	                                    	        kP   kI   kD   kF             Iz    PeakOut */
                 public final static Gains kGains_Turning = new Gains( 0.02, 0.0, 0.0, 0.0,            200,  1.00 );
-                       
+                
                 /** ---- Flat constants, you should not need to change these ---- */
                 /* We allow either a 0 or 1 when selecting an ordinal for remote devices [You can have up to 2 devices assigned remotely to a talon/victor] */
                 public final static int REMOTE_0 = 0;
@@ -76,56 +78,23 @@ public final class Constants {
                 public final static int kSlot_Turning = SLOT_1;
                 public final static int kSlot_Velocit = SLOT_2;
                 public final static int kSlot_MotProf = SLOT_3;
-                //Shaft Encoders attached to the RoboRIO
-                // public static final int[] kLeftEncoderPorts = new int[] { 0, 1 }; // DIO ports
-                // public static final int[] kRightEncoderPorts = new int[] { 2, 3 };
-                // public static final boolean kLeftEncoderReversed = false;
-                // public static final boolean kRightEncoderReversed = true;
+                
                 public static boolean kGyroReversed = true;
                 public static int kTurnTravelUnitsPerRotation = 3600;
                 public static int kEncoderUnitsPerRotation = 88554;
 
-                // public static final int kEncoderCPR = 1024;
-                // public static final double kWheelDiameterMeters = 0.15;
-                // public static final double kEncoderDistancePerPulse =
-                //                 // Assumes the encoders are directly mounted on the wheel shafts
-                //                 (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
-
-                // public static final boolean kGyroReversed = true;
-
-                // // Constants for Simulation
-                // public static final double kTrackwidthMeters = 0.69;
-                // public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
-                //                 kTrackwidthMeters);
-
-                // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-                // These characterization values MUST be determined either experimentally or
-                // theoretically
-                // for *your* robot's drive.
-                // The Robot Characterization Toolsuite provides a convenient tool for obtaining
-                // these
-                // values for your robot.
-                // public static final double ksVolts = 0.22;
-                // public static final double kvVoltSecondsPerMeter = 1.98;
-                // public static final double kaVoltSecondsSquaredPerMeter = 0.2;
-
-                // // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-                // // These characterization values MUST be determined either experimentally or
-                // // theoretically
-                // // for *your* robot's drive.
-                // // These two values are "angular" kV and kA
-                // public static final double kvVoltSecondsPerRadian = 1.5;
-                // public static final double kaVoltSecondsSquaredPerRadian = 0.3;
-
-                // // Used for Simulation
-                // public static final LinearSystem<N2, N2, N2> kDrivetrainPlant = LinearSystemId.identifyDrivetrainSystem(
-                //                 kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter, kvVoltSecondsPerRadian,
-                //                 kaVoltSecondsSquaredPerRadian);
-
-                // Example values only -- use what's on your physical robot!
-                // public static final DCMotor kDriveGearbox = DCMotor.getCIM(2);
-                // public static final double kDriveGearing = 8;
-
+                /* ---- Characterization Calculations ---- */
+                public static final double ksVolts = 0.65154;
+                public static final double kvVoltSecondsPerMeter = .000012616;
+                public static final double kaVoltSecondsSquaredPerMeter = 0.0000003799;
+                public static final double kPDriveVel = 8.5;
+                public static final double kTrackwidthMeters = 0.6731;
+                public static final DifferentialDriveKinematics kDriveKinematics = 
+                        new DifferentialDriveKinematics(kTrackwidthMeters);
+                public static final double kMaxSpeedMetersPerSecond = 3;
+                public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+                // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+                public static final double kRamseteB = 2;
+                public static final double kRamseteZeta = 0.7;
         }
-
 }
