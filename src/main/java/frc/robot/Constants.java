@@ -28,10 +28,10 @@ public final class Constants {
         public static final int DRIVER_LEFT_AXIS = 1;
 
         // Talons
-        public static final int LEFT_TALON_LEADER = 2;
-        public static final int LEFT_TALON_FOLLOWER = 4;
-        public static final int RIGHT_TALON_LEADER = 1;
-        public static final int RIGHT_TALON_FOLLOWER = 3;
+        public static final int LEFT_TALON_LEADER = 1;
+        public static final int LEFT_TALON_FOLLOWER = 3;
+        public static final int RIGHT_TALON_LEADER = 2;
+        public static final int RIGHT_TALON_FOLLOWER = 4;
 
         public static final class DriveConstants {
                 /*
@@ -47,7 +47,7 @@ public final class Constants {
                                                                  // drivetrain, encoders mount 1:1 with the gearbox shaft.
                 public static final double kGearRatio = 10.71;   // Switch kSensorGearRatio to this gear ratio if encoder is on the motor instead
                                                                  // of on the gearbox.
-                public static final double kWheelRadiusInches = 3;
+                public static final double kWheelRadiusInches = 6.5;
                 public static final int k100msPerSecond = 10;
                 public static final double kNeutralDeadband = 0.003;
 
@@ -56,8 +56,8 @@ public final class Constants {
                   * kF: 1023 represents output value to Talon at 100%, 6800 represents Velocity units at 100% output
                   * Not all set of Gains are used in this project and may be removed as desired.
                   * 
-                  * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
-                public final static Gains kGains_Turning = new Gains( 2.0, 0.0,  4.0, 0.0,            200,  1.00 );
+                  * 	                                    	        kP   kI   kD   kF             Iz    PeakOut */
+                public final static Gains kGains_Turning = new Gains( 0.02, 0.0, 0.0, 0.0,            200,  1.00 );
                        
                 /** ---- Flat constants, you should not need to change these ---- */
                 /* We allow either a 0 or 1 when selecting an ordinal for remote devices [You can have up to 2 devices assigned remotely to a talon/victor] */
