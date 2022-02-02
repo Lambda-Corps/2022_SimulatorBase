@@ -45,7 +45,7 @@ public final class Constants {
                 * characterization/introduction.html#introduction-to-robot-characterization
                 */
                 public static final int kCountsPerRev = 2048;    // Encoder counts per revolution of the motor shaft.
-                public static final double kSensorGearRatio = 1; // Gear ratio is the ratio between the *encoder* and the wheels. On the AndyMark
+                public static final double kSensorGearRatio = 10.71; // Gear ratio is the ratio between the *encoder* and the wheels. On the AndyMark
                                                                  // drivetrain, encoders mount 1:1 with the gearbox shaft.
                 public static final double kGearRatio = 10.71;   // Switch kSensorGearRatio to this gear ratio if encoder is on the motor instead
                                                                  // of on the gearbox.
